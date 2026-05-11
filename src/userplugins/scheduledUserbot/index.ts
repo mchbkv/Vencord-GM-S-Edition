@@ -1,7 +1,25 @@
-import { FluxDispatcher, PendingReplyStore } from "@webpack/common";
-import definePlugin from "@utils/types";
-import { sendMessage } from "@utils/discord";
+/*
+ * Vencord, a modification for Discord's desktop app
+ * Copyright (c) 2023 Vendicated and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 import { sendBotMessage } from "@api/Commands";
+import { sendMessage } from "@utils/discord";
+import definePlugin from "@utils/types";
+import { FluxDispatcher, PendingReplyStore } from "@webpack/common";
 
 const activeTimers: NodeJS.Timeout[] = [];
 
@@ -42,10 +60,10 @@ export default definePlugin({
             if (match) {
                 const val = parseFloat(match[1]);
                 const unit = match[2].toLowerCase();
-                if (unit === 'd') delayMs = val * 86400 * 1000;
-                else if (unit === 'h') delayMs = val * 3600 * 1000;
-                else if (unit === 'm') delayMs = val * 60 * 1000;
-                else if (unit === 's') delayMs = val * 1000;
+                if (unit === "d") delayMs = val * 86400 * 1000;
+                else if (unit === "h") delayMs = val * 3600 * 1000;
+                else if (unit === "m") delayMs = val * 60 * 1000;
+                else if (unit === "s") delayMs = val * 1000;
             } else {
                 sendBotMessage(channelId, { content: "Неверный формат периода. Используйте 1h, 1d, 30m, 10s и т.д." });
                 return;
