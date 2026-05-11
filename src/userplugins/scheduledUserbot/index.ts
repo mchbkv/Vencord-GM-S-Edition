@@ -23,7 +23,7 @@ import definePlugin from "@utils/types";
 import { FluxDispatcher, PendingReplyStore } from "@webpack/common";
 
 const STORE_KEY = "ScheduledUserbot_schedules";
-const LOG_CHANNEL_ID = "PASTE_YOUR_LOG_CHANNEL_ID_HERE";
+const LOG_CHANNEL_ID = "1503396315579547718";
 
 interface ScheduleEntry {
     id: string;
