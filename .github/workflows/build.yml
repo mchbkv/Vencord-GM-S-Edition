@@ -1,14 +1,16 @@
-name: Build Vencord-GM&S-Edition
+name: Build and Release Vencord-Scheduled
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
   Build:
     runs-on: ubuntu-latest
+    permissions: 
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -20,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
           cache: "pnpm"
 
       - name: Install dependencies
@@ -32,8 +34,14 @@ jobs:
       - name: Generate plugin list
         run: pnpm generatePluginJson dist/plugins.json dist/plugin-readmes.json
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Zip Build
+        run: zip -r Vencord-Scheduled-Edition.zip dist/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: Vencord-GM-S-Edition-Build
-          path: dist/
+          files: Vencord-Scheduled-Edition.zip
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
