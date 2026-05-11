@@ -35,7 +35,10 @@ jobs:
         run: pnpm generatePluginJson dist/plugins.json dist/plugin-readmes.json
 
       - name: Zip Build
-        run: zip -r Vencord-Scheduled-Edition.zip dist/
+        shell: bash
+        run: |
+          cd dist
+          zip -r ../Vencord-Scheduled-Edition.zip .
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
