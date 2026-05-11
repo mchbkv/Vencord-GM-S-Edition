@@ -1,0 +1,51 @@
+name: Autobuild Custom Vencord
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Vencord
+        run: pnpm build
+
+      - name: Zip built files
+        run: zip -r vencord-custom-build.zip dist/
+
+      - name: Create Release and Upload
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v1.0.${{ github.run_number }}"
+          name: "Vencord GM&S Edition (Build #${{ github.run_number }})"
+          files: vencord-custom-build.zip
+          body: |
+            Автоматическая сборка Vencord со встроенным плагином `scheduledUserbot`.
+            
+            **Как установить:**
+            1. Скачайте архив `vencord-custom-build.zip` из этого релиза.
+            2. Распакуйте его в удобное место.
+            3. Запустите официальный Vencord Installer, перейдите в раздел Patch, выберите путь к распакованной папке `dist` и установите.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
